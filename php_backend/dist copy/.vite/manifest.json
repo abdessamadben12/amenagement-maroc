@@ -1,0 +1,172 @@
+{
+  "_index.esm-DYz5gMC6.js": {
+    "file": "assets/js/index.esm-DYz5gMC6.js",
+    "name": "index.esm",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_react-DrH7PivC.js": {
+    "file": "assets/js/react-DrH7PivC.js",
+    "name": "react"
+  },
+  "index.html": {
+    "file": "assets/js/index-MNVBwLPC.js",
+    "name": "index",
+    "src": "index.html",
+    "isEntry": true,
+    "imports": [
+      "_react-DrH7PivC.js"
+    ],
+    "dynamicImports": [
+      "src/pages/Home.jsx",
+      "src/pages/Contact.jsx",
+      "src/pages/about.jsx",
+      "src/pages/SavoirFaire.jsx",
+      "src/pages/DemandeDevez.jsx",
+      "src/pages/services/Revonation.jsx",
+      "src/pages/services/amenagement_interieur.jsx",
+      "src/pages/services/TraveauxAluminium.jsx",
+      "src/pages/services/AgencementProfessionnel.jsx",
+      "src/pages/services/TravauxMenuiserieBois.jsx",
+      "src/pages/services/Pienture.jsx",
+      "src/pages/services/RevêtementSol.jsx",
+      "src/pages/services/Plafonds.jsx"
+    ],
+    "css": [
+      "assets/css/index-C5M77VI0.css"
+    ]
+  },
+  "src/pages/Contact.jsx": {
+    "file": "assets/js/Contact-DPf_SrG0.js",
+    "name": "Contact",
+    "src": "src/pages/Contact.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_index.esm-DYz5gMC6.js",
+      "_react-DrH7PivC.js"
+    ]
+  },
+  "src/pages/DemandeDevez.jsx": {
+    "file": "assets/js/DemandeDevez-C08jjyK5.js",
+    "name": "DemandeDevez",
+    "src": "src/pages/DemandeDevez.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_index.esm-DYz5gMC6.js",
+      "_react-DrH7PivC.js"
+    ]
+  },
+  "src/pages/Home.jsx": {
+    "file": "assets/js/Home-6kk9nzxZ.js",
+    "name": "Home",
+    "src": "src/pages/Home.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_react-DrH7PivC.js"
+    ]
+  },
+  "src/pages/SavoirFaire.jsx": {
+    "file": "assets/js/SavoirFaire-D_F2zyYT.js",
+    "name": "SavoirFaire",
+    "src": "src/pages/SavoirFaire.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_react-DrH7PivC.js"
+    ]
+  },
+  "src/pages/about.jsx": {
+    "file": "assets/js/about-DedEHYuf.js",
+    "name": "about",
+    "src": "src/pages/about.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_react-DrH7PivC.js"
+    ]
+  },
+  "src/pages/services/AgencementProfessionnel.jsx": {
+    "file": "assets/js/AgencementProfessionnel-BAIOe2PH.js",
+    "name": "AgencementProfessionnel",
+    "src": "src/pages/services/AgencementProfessionnel.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_react-DrH7PivC.js"
+    ]
+  },
+  "src/pages/services/Pienture.jsx": {
+    "file": "assets/js/Pienture-BLzTeI_G.js",
+    "name": "Pienture",
+    "src": "src/pages/services/Pienture.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_react-DrH7PivC.js"
+    ]
+  },
+  "src/pages/services/Plafonds.jsx": {
+    "file": "assets/js/Plafonds-sp6R0vzs.js",
+    "name": "Plafonds",
+    "src": "src/pages/services/Plafonds.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_react-DrH7PivC.js"
+    ]
+  },
+  "src/pages/services/Revonation.jsx": {
+    "file": "assets/js/Revonation-QgXlFsUM.js",
+    "name": "Revonation",
+    "src": "src/pages/services/Revonation.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_react-DrH7PivC.js"
+    ]
+  },
+  "src/pages/services/RevêtementSol.jsx": {
+    "file": "assets/js/RevêtementSol-Cle-od0B.js",
+    "name": "RevêtementSol",
+    "src": "src/pages/services/RevêtementSol.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_react-DrH7PivC.js"
+    ]
+  },
+  "src/pages/services/TravauxMenuiserieBois.jsx": {
+    "file": "assets/js/TravauxMenuiserieBois-tgiR1Zpz.js",
+    "name": "TravauxMenuiserieBois",
+    "src": "src/pages/services/TravauxMenuiserieBois.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_react-DrH7PivC.js"
+    ]
+  },
+  "src/pages/services/TraveauxAluminium.jsx": {
+    "file": "assets/js/TraveauxAluminium-B-a9zBV5.js",
+    "name": "TraveauxAluminium",
+    "src": "src/pages/services/TraveauxAluminium.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_react-DrH7PivC.js"
+    ]
+  },
+  "src/pages/services/amenagement_interieur.jsx": {
+    "file": "assets/js/amenagement_interieur-DMc_Dhsu.js",
+    "name": "amenagement_interieur",
+    "src": "src/pages/services/amenagement_interieur.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_react-DrH7PivC.js"
+    ]
+  }
+}
