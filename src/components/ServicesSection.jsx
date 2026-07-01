@@ -1,7 +1,7 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Link, useNavigate } from 'react-router-dom';
+import OptimizedImage from './OptimizedImage';
 // Animation variants réutilisables
 const cardVariants = {
   hidden: { 
@@ -114,7 +114,7 @@ const ServiceCard = ({ title, description, imageUrl, className = '', index,link 
     >
       {/* Image Container */}
       <motion.div className="overflow-hidden">
-        <motion.img
+        <OptimizedImage
           src={imageUrl}
           alt={title}
           className="w-full h-48 sm:h-56 md:h-64 object-cover object-center "
@@ -292,7 +292,7 @@ const ServicesSection = () => {
             description="Nous prenons en charge tous vos projets de rénovation et de construction…"
             imageUrl="/images/Amenagement_maroc_services_renovation.png"
             index={0}
-            link="/services/revonation"
+            link="/services/renovation"
           />
           <ServiceCard
     title="Aménagement intérieur"

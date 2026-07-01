@@ -8,18 +8,6 @@ import { State } from "../components/state";
 
 export function Home(){
     return<>
-     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-     <meta name="description" content="Aménagement Maroc est une entreprise spécialisée dans les travaux de construction, rénovation, aménagement intérieur et agencement immobilier au Maroc." />
-     <meta name="keywords" content="Aménagement Maroc, constrauction, rénovation, aménagement intérieur, agencement immobilier, Maroc" />
-     <meta name="author" content="Aménagement Maroc" />
-     {/* keys */}
-     <meta name="keywords" content="Aménagement Maroc, construction, rénovation, aménagement intérieur, agencement immobilier, Maroc" />
-     <meta name="author" content="Aménagement Maroc" />
-     <meta name="robots" content="index, follow" />
-     <meta name="googlebot" content="index, follow" />
-     <meta name="google" content="notranslate" />
-     <title>Aménagement Maroc - Une solution clé en main pour tout votre projet.</title>
-
     <ContractingHero />
     <State/>
     <AboutUsSection/>

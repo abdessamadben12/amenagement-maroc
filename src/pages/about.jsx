@@ -1,15 +1,9 @@
 import { Link } from "react-router-dom";
+import OptimizedImage from "../components/OptimizedImage";
 
 export default function About() {
     return (
       <>
-      <meta name="description" content="Aménagement Maroc est une entreprise spécialisée dans les travaux de construction, rénovation, aménagement intérieur et agencement immobilier au Maroc." /> 
-      <meta name="keywords" content="Aménagement Maroc, construction, rénovation, aménagement intérieur, agencement immobilier, Maroc" />
-      <meta name="author" content="Aménagement Maroc" />
-      <meta name="robots" content="index, follow" />
-      <meta name="googlebot" content="index, follow" />
-      <meta name="google" content="notranslate" />
-      <title>Aménagement Maroc - À propos de nous.</title>
       <section>
       <section className="w-full">
         {/* Bandeau haut (fond gris + grille 2 colonnes) */}
@@ -18,16 +12,16 @@ export default function About() {
             <div className="grid items-center gap-10 lg:grid-cols-2">
               {/* Image à gauche */}
               <div className="w-full h-full relative z-10">
-                <img
+                <OptimizedImage
                   src="/images/Amenagement_maroc_about.png"
                   alt="Échantillons matériaux"
                   className="object-cover w-full h-auto lg:absolute"
                 />
               </div>
               <div className="lg:pl-10">
-                <h2 className="text-3xl sm:text-4xl font-semibold">
+                <h1 className="text-3xl sm:text-4xl font-semibold">
                   À propos de nous
-                </h2>
+                </h1>
   
                 <p className="mt-4  leading-relaxed text-base md:text-lg   text-white/90">
                 Basée à Casablanca, <strong>Aménagement Maroc</strong> présente les services d’aménagement, 

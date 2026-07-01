@@ -2,12 +2,12 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   plugins: [
     react(),
   ],
   build: {
-    manifest:true,
+    manifest: !isSsrBuild,
     target: 'es2017', // code plus moderne et léger
     assetsInlineLimit: 0, // évite de mettre les images dans le JS
     cssCodeSplit: true,
@@ -18,7 +18,7 @@ export default defineConfig({
       output: {
         // noms optimisés pour le cache
         chunkFileNames: 'assets/js/[name]-[hash].js',
-        entryFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: isSsrBuild ? '[name].js' : 'assets/js/[name]-[hash].js',
         assetFileNames: (assetInfo) => {
           const ext = assetInfo.name.split('.').pop()
           if (/png|jpe?g|svg|gif|webp|avif/i.test(ext)) {
@@ -29,9 +29,12 @@ export default defineConfig({
           }
           return 'assets/[name]-[hash][extname]'
         },
-        manualChunks: {
-          react: ['react', 'react-dom'], // séparer React pour un meilleur cache
-        },
+        ...(!isSsrBuild && {
+          manualChunks: {
+            react: ['react', 'react-dom'],
+            motion: ['framer-motion'],
+          },
+        }),
       },
     },
     
@@ -39,4 +42,4 @@ export default defineConfig({
   optimizeDeps: {
     include: ['react', 'react-dom'],
   },
-})
+}))

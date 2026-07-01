@@ -1,5 +1,5 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import OptimizedImage from "../../components/OptimizedImage";
 
 function AmenagementInterieur() {
   return (
@@ -33,7 +33,7 @@ function AmenagementInterieur() {
           px-8 pt-6
         "
       >
-        <img
+        <OptimizedImage
           src="/images/Amenagement_maroc_services_amenagement_interieur.png"
           alt="Aménagement intérieur"
           className="w-full h-64 sm:h-80 md:h-96 lg:h-[450px] xl:h-[500px] object-cover bg-center"

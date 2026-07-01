@@ -1,5 +1,5 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import OptimizedImage from "../../components/OptimizedImage";
 
 function Plafonds() {
   return (
@@ -32,7 +32,7 @@ function Plafonds() {
           px-8 pt-6
         "
       >
-        <img
+        <OptimizedImage
           src="/images/Amenagement_maroc_services_plafonds.png"
           alt="Plafonds et faux plafonds"
           className="w-full h-64 sm:h-80 md:h-96 lg:h-[450px] xl:h-[500px] object-cover bg-center"

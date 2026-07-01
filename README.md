@@ -1,16 +1,56 @@
-# React + Vite
+# Aménagement Maroc
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Site vitrine d’Aménagement Maroc, composé d’un frontend React/Vite et d’une API PHP pour les formulaires de contact et de devis.
 
-Currently, two official plugins are available:
+## Prérequis
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Node.js 20.19+ ou 22.12+
+- npm
+- PHP 8.1+
+- Composer
 
-## React Compiler
+## Développement frontend
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+copy .env.example .env
+npm run dev
+```
 
-## Expanding the ESLint configuration
+`VITE_API_BASE_URL` doit pointer vers l’API PHP en développement. Laisser la valeur vide lorsque le frontend et l’API utilisent le même domaine.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Backend PHP
+
+```bash
+cd php_backend
+composer install
+copy .env.example .env
+php -S localhost:8080 -t public public/index.php
+```
+
+Configurer SMTP et `CORS_ORIGINS` dans `php_backend/.env` avant de tester les formulaires.
+
+## Vérifications
+
+```bash
+npm run lint
+npm run build
+npm run seo:check
+php -l php_backend/public/index.php
+```
+
+## Production
+
+`npm run build` optimise les images, construit les bundles client et serveur, puis génère un fichier HTML complet pour chacune des 13 routes indexables. Le backend PHP sert directement ces fichiers depuis `dist/`.
+
+En production :
+
+1. Exécuter `npm ci && npm run build`.
+2. Configurer `php_backend/.env` avec `FRONTEND_DIST=../dist`.
+3. Définir `php_backend/public/` comme racine web.
+4. Activer `mod_rewrite` sous Apache ou l’équivalent `try_files` sous Nginx.
+
+Documentation :
+
+- [SEO et déploiement](docs/SEO.md)
+- [Performance et Lighthouse](docs/PERFORMANCE.md)

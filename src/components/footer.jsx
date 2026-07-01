@@ -1,7 +1,5 @@
 // components/Footer.jsx
-import { div } from 'framer-motion/client';
-import React from 'react';
-import { BiMessageAltEdit, BiPhone } from 'react-icons/bi';
+import { BiPhone } from 'react-icons/bi';
 import { FaEnvelope, FaMapMarkerAlt, FaWhatsapp } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 const Footer = () => {
@@ -16,6 +14,10 @@ const Footer = () => {
                 <img
                   src="/logo_Aménagement.png"
                   alt="Aménagement Maroc Logo"
+                  width="2384"
+                  height="621"
+                  loading="lazy"
+                  decoding="async"
                   className="h-auto w-[80%] max-w-[220px]"
                 />
               </div>
@@ -124,7 +126,7 @@ const ContactInfo = () => {
             </div>
             <div className="flex items-center">
                 <FaEnvelope className='w-5 h-5 mr-3 text-white'/>
-                <a href="mailto:contact@amenagement-maroc.com" className="hover:text-white text-nowrap transition-colors duration-300">contact@amenagement-maroc.com</a>
+                <a href="mailto:contact@amenagement-maroc.com" className="hover:text-white break-all transition-colors duration-300">contact@amenagement-maroc.com</a>
             </div>
         </div>
     );

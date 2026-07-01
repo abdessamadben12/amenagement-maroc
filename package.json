@@ -1,21 +1,19 @@
 {
-  "name": "alidade",
+  "name": "amenagement-maroc",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "compress:originals": "node scripts/compress-originals.mjs",
+    "optimize:images": "node scripts/optimize-images.mjs",
+    "build:client": "vite build",
+    "build:ssr": "vite build --ssr src/entry-server.jsx --outDir dist-ssr",
+    "prerender": "node scripts/prerender.mjs",
+    "build": "npm run optimize:images && npm run build:client && npm run build:ssr && npm run prerender",
+    "seo:check": "node scripts/check-seo.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
-  },
-  "reactSnap": {
-    "inlineCss": true,
-    "inlineImages":true,
-    "source":"dist",
-    "destination":"dist/prerender",
-    "include":["/","/contact","/devis","/about","/services/amenagement-interieur","/services/travaux-peinture-et-finitions","/services/travaux-aluminium","/services/agencement-professionnel","/services/travaux-menuiserie-en-bois","/services/travaux-revetement-de-sol","/services/travaux-plafonds-et-faux-plafonds","/savoir-faire"],
-    "puppeteerArgs":["--no-sandbox","--disable-setuid-sandbox"]
   },
   "dependencies": {
     "framer-motion": "^12.23.24",
@@ -37,9 +35,8 @@
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
     "postcss": "^8.5.6",
-    "react-snap": "^5.2.1",
+    "sharp": "^0.35.2",
     "tailwindcss": "^3.4.18",
-    "vite": "^7.1.7",
-    "vite-plugin-ssr": "^0.4.142"
+    "vite": "^7.1.7"
   }
 }

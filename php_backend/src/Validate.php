@@ -42,21 +42,31 @@ function validate_devis_payload(array $in): array {
   $email = trim((string)($in['email'] ?? ''));
   $telephone = trim((string)($in['telephone'] ?? ''));
   $typeProjet = trim((string)($in['type_projet'] ?? ''));
-  $adreesProjet = trim((string)($in['address'] ?? ''));
+  $address = trim((string)($in['address'] ?? ''));
   $budget = trim((string)($in['budget'] ?? ''));
-  $descriptionProjet = trim((string)($in['description'] ?? ''));
+  $description = trim((string)($in['description'] ?? ''));
+  $website = (string)($in['website'] ?? '');
 
   if (!str_ok($nom, 2)) $errors['nom'] = 'Nom invalide';
   if (!email_ok($email)) $errors['email'] = 'Email invalide';
   if (!phone_ok($telephone)) $errors['telephone'] = 'Téléphone invalide';
   if (!str_ok($typeProjet, 2)) $errors['type_projet'] = 'Type de projet invalide';
-  if (!str_ok($adress, 2)) $errors['address'] = 'Adresse de projet invalide';
-  if (!str_ok($budget, 2)) $errors['budget'] = 'Budget invalide';
-  if (!str_ok($descriptionProjet, 2)) $errors['description'] = 'Description de projet invalide';
+  if (!str_ok($address, 2)) $errors['address'] = 'Adresse de projet invalide';
+  if ($budget !== '' && (!is_numeric($budget) || (float)$budget < 0)) $errors['budget'] = 'Budget invalide';
+  if (!str_ok($description, 10)) $errors['description'] = 'Description de projet invalide';
 
   return [
     'valid' => empty($errors),
-    'data'  => compact('nom','email','telephone','type_projet','address','budget','description'),
+    'data'  => [
+      'nom' => $nom,
+      'email' => $email,
+      'telephone' => $telephone,
+      'type_projet' => $typeProjet,
+      'address' => $address,
+      'budget' => $budget,
+      'description' => $description,
+      'website' => $website,
+    ],
     'errors'=> $errors
   ];
 }

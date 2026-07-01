@@ -1,5 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
+import OptimizedImage from './OptimizedImage';
 
 const FullServiceAccompaniment = () => {
   return (
@@ -30,7 +30,7 @@ const FullServiceAccompaniment = () => {
 
         {/* Image Section */}
         <div className="lg:w-1/2 xl:w-[50%] mt-8 lg:mt-0 relative flex justify-center">
-          <img
+          <OptimizedImage
             src="/images/Amenagement_maroc_accompagner.png" // Replace with your image path
             alt="Renovation work in progress"
             className="w-full max-w-md lg:max-w-none h-auto object-cover "

@@ -17,7 +17,7 @@ export default function Navbar() {
   ];
   
   const servicesDropdown = [
-    { name: "Rénovation complète", href: "/services/revonation" },
+    { name: "Rénovation complète", href: "/services/renovation" },
     { name: "Aménagement intérieur", href: "/services/amenagement-interieur" },
     { name: "Agencement professionnel", href: "/services/agencement-professionnel" },
     { name: "Travaux d'aluminium", href: "/services/travaux-aluminium" },
@@ -46,9 +46,11 @@ export default function Navbar() {
         <Link to="/" className="flex-grow flex   justify-start md:justify-center lg:flex-none lg:order-none">
           <img
             src="/logo_Aménagement.png"
-            alt="logo"
+            alt="Aménagement Maroc"
+            width="2384"
+            height="621"
             className="w-40 h-9 md:w-48 md:h-11 lg:w-56 lg:h-12 object-contain"
-            loading="lazy"
+            loading="eager"
           />
         </Link>
 

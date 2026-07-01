@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import OptimizedImage from "../components/OptimizedImage";
 
 const ServiceCardOverlap = ({ image, title, description, index ,link}) => {
   const isEven = index % 2 === 0;
@@ -36,7 +37,7 @@ const ServiceCardOverlap = ({ image, title, description, index ,link}) => {
       >
         {/* Image Section */}
         <div className="relative w-full lg:w-3/5 h-80 lg:h-[500px] overflow-hidden group  ">
-          <img
+          <OptimizedImage
             src={image}
             alt={title}
             loading="lazy"
@@ -114,7 +115,7 @@ const SavoirFaireOverlap = () => {
   const services = [
     {
       image: "/images/savoir-faire/Amenagement_maroc_renovation.png",
-      link: "/services/revonation",
+      link: "/services/renovation",
       title: "Rénovation complète",
       description:
         "Nous prenons en charge tous vos projets de rénovation, de construction et l'ensemble des travaux pour transformer vos espaces, optimiser votre confort et valoriser votre patrimoine...",
@@ -176,7 +177,7 @@ const SavoirFaireOverlap = () => {
       <div className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
   {/* Image d’arrière-plan */}
   <div className="absolute inset-0 z-0">
-    <img
+    <OptimizedImage
       src="/images/Amenagement_maroc_savoir_faire.jpg"   // <-- Ajoute l’extension
       alt="Savoir-faire construction"
       className="w-full h-full object-cover"

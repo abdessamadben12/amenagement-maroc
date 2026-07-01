@@ -1,29 +1,8 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import OptimizedImage from "./OptimizedImage";
 export default function ContractingHero() {
-    const [taille, setTaille] = useState(window.innerWidth);
-    
-    useEffect(() => {
-        const handleResize = () => {
-            setTaille(window.innerWidth);
-        };
-
-        window.addEventListener('resize', handleResize);
-        
-        // Cleanup
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
-    const cards = [
-        "10 ans d'expérience",
-        "+30 collaborateur",
-        "100% de satisfaction client",
-    ];
-
     return (
-        <div className={`flex flex-col bg-[#595E62] ${taille < 759 ? 'min-h-full' : ''}`}>
+        <div className="flex min-h-full flex-col bg-[#595E62]">
             <div className="w-full text-white relative">
                 {/* Hero */}
                 <section className="relative w-full">
@@ -37,8 +16,8 @@ export default function ContractingHero() {
                                     className="text-start text-balance tracking-tight 
                                     text-3xl sm:text-3xl md:text-3xl lg:text-3xl 2xl:text-4xl leading-tight font-semibold"
                                 >
-                                    <span className={taille < 1134 ? "block text-nowrap" : " blocktext-nowrap"}>Une solution clé en main</span>
-                                    <span className={taille < 1134 ? "block text-nowrap" : " block text-nowrap"}>un interlocuteur unique</span>
+                                    <span className="block">Une solution clé en main</span>
+                                    <span className="block">un interlocuteur unique</span>
                                     <span className="block">pour tout votre projet.</span>
                                 </h1>
 
@@ -47,7 +26,7 @@ export default function ContractingHero() {
                                     Oubliez le stress des travaux et le choix des matériaux, on s'occupe de tout.
                                 </p>
 
-                                <div className={`mt-6 sm:mt-8 flex ${taille < 1134 ? 'flex-col' : 'flex-row'} items-stretch sm:items-center gap-3 sm:gap-4`}>
+                                <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
                                     <Link to="/devis"
                                         className="inline-flex font-semibold items-center justify-center rounded-full bg-[#AF937F] text-white px-6 py-3 sm:px-7 lg:px-8 xl:px-10 sm:py-3.5 lg:py-4  shadow-md transition-all hover:translate-y-0.5 hover:shadow-lg hover:bg-[#8d7766] hover:text-white focus:outline-none focus:ring-2 focus:ring-white/40"
                                     >
@@ -65,13 +44,14 @@ export default function ContractingHero() {
 
                             {/* Right image */}
                             <div className="relative w-full">
-                                <div className={`absolute w-full lg:h-[50vh] xl:h-[55vh] md:h-full  z-30 ${taille < 1134 ? 'relative' : ''}`}>
+                                <div className="relative z-30 w-full lg:absolute lg:h-[50vh] xl:h-[55vh]">
                                     {/* Big photo */}
-                                    <img
+                                    <OptimizedImage
                                         src="/images/Amenagement_maroc_hero.png"
                                         alt="Entrepreneur du bâtiment tenant un clipboard sur un chantier"
-                                        className={`w-full object-cover object-center ${taille < 762 ? 'h-full' : ''}`}
-                                        loading="lazy"
+                                        className="h-auto w-full object-cover object-center"
+                                        sizes="(max-width: 1023px) 100vw, 50vw"
+                                        priority
                                     />
                                     {/* <img src="/images/Amenagement_maroc_hero.png" alt="Entrepreneur du bâtiment tenant un clipboard sur un chantier" /> */}
                                 </div>

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AnimatePresence, motion } from 'framer-motion';
+import { submitForm } from '../lib/api';
 import {
   FaEnvelope,
   FaPhoneAlt,
@@ -16,30 +17,22 @@ const Devis = () => {
   } = useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(null);
+  const [submitError, setSubmitError] = useState('');
   const [projectType, setProjectType] = useState('');
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     setSubmitSuccess(null);
-
-    const response = await fetch('https://amenagement-maroc.com/api/devis', { method: 'POST', body: JSON.stringify(data) });
-    if (response.ok) {
-      setSubmitSuccess(true);
-      reset();
-      setProjectType('');
-    } else {
-      setSubmitSuccess(false);
-    }
-    setIsSubmitting(false);
+    setSubmitError('');
 
     try {
-      console.log('Devis data submitted:', data);
+      await submitForm('/api/devis', data);
       setSubmitSuccess(true);
       reset();
       setProjectType('');
     } catch (error) {
-      console.error('Submission error:', error);
       setSubmitSuccess(false);
+      setSubmitError(error.message);
     } finally {
       setIsSubmitting(false);
       setTimeout(() => setSubmitSuccess(null), 5000);
@@ -61,15 +54,8 @@ const Devis = () => {
 
   return (
   <>
-  <meta name="description" content="Obtenez un devis personnalisé pour votre projet de construction ou de rénovation. Notre équipe d'experts étudiera votre demande et vous répondra sous 48h." />
-  <meta name="keywords" content="devis, construction, rénovation, aménagement, Maroc" />
-  <meta name="author" content="Aménagement Maroc" />
-  <meta name="robots" content="index, follow" />
-  <meta name="googlebot" content="index, follow" />
-  <meta name="google" content="notranslate" />
-  <title>Aménagement Maroc - Obtenez un devis personnalisé pour votre projet.</title>
-   <div className=" bg-[#595E62] text-[#A9A9A9] p-8 relative overflow-hidden">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
+   <div className="bg-[#595E62] text-[#A9A9A9] p-4 sm:p-8 relative overflow-hidden">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 relative z-10">
         
         {/* Left Section */}
         <motion.div
@@ -79,7 +65,7 @@ const Devis = () => {
         >
          <div className='flex  justify-center   '>
          <div className=''>
-       <h1 className="text-white text-5xl font-bold mb-6 ">Demandez votre <br /> Devis Gratuit</h1>
+       <h1 className="text-white text-2xl sm:text-4xl md:text-5xl font-bold mb-6">Demandez votre <br className="hidden sm:block" /> Devis Gratuit</h1>
           <p className="text-lg leading-relaxed mb-10 ">
           Nous sommes là pour répondre à toutes vos questions. <br />N'hésitez pas à nous contacter.
 
@@ -93,7 +79,7 @@ const Devis = () => {
             <FaEnvelope className="w-8 h-8 mr-4 text-[#ad927e]" />
             <div>
               <p className="text-sm">ENVOYEZ-NOUS UN EMAIL</p>
-              <a href="mailto:contact@constructy.com" className="text-white  justify-center text-lg flex items-center hover:text-[#ad927e] transition-colors duration-300">
+              <a href="mailto:contact@amenagement-maroc.com" className="text-white  justify-center text-lg flex items-center hover:text-[#ad927e] transition-colors duration-300">
                 contact@amenagement-maroc.com
               </a>
             </div>
@@ -111,8 +97,8 @@ const Devis = () => {
               <p className="text-sm">APPELER-NOUS</p>
               <div className="text-white text-lg flex items-center  transition-colors duration-300">
               <div className='flex flex-col py-1'>
-                < a href="tel:+212 668-746386">+212 668-746386</a>
-                <a href="tel:+212 522484425">+212 522484425</a>
+                <a href="tel:+212668746386">+212 668-746386</a>
+                <a href="tel:+212522484425">+212 522484425</a>
               </div>
                 
               </div>
@@ -285,6 +271,11 @@ const Devis = () => {
               </div>
             </div>
 
+            <div className="hidden" aria-hidden="true">
+              <label htmlFor="website">Site web</label>
+              <input id="website" type="text" tabIndex="-1" autoComplete="off" {...register('website')} />
+            </div>
+
             <div className="relative flex items-center justify-end mb-8">
               
               <motion.div
@@ -369,7 +360,7 @@ const Devis = () => {
                 className="bg-red-900 bg-opacity-20 border border-red-400 text-red-400 p-4 rounded-lg text-center"
               >
                 <p className="text-lg font-semibold">Échec de l'envoi</p>
-                <p className="text-sm mt-1">Veuillez réessayer ou nous contacter directement.</p>
+                <p className="text-sm mt-1">{submitError || 'Veuillez réessayer ou nous contacter directement.'}</p>
               </motion.div>
             )}
           </AnimatePresence>
@@ -378,16 +369,15 @@ const Devis = () => {
 
      
     </div>
-    <div className='bg-white w-full  flex justify-center items-center '>
-    <iframe
-    className='w-full  '
-  src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d7673.673044698761!2d-7.6178959251005525!3d33.582567251021025!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzPCsDM0JzU2LjUiTiA3wrAzNic1My4xIlc!5e0!3m2!1sfr!2sma!4v1761558311843!5m2!1sfr!2sma"  
-  width="600"
-  height="450"
-  allowfullscreen=""
-  loading="lazy"
-  referrerpolicy="no-referrer-when-downgrade">
-</iframe>
+    <div className="bg-white w-full flex justify-center items-center">
+      <iframe
+        className="w-full h-48 sm:h-64 md:h-96"
+        src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d7673.673044698761!2d-7.6178959251005525!3d33.582567251021025!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzPCsDM0JzU2LjUiTiA3wrAzNic1My4xIlc!5e0!3m2!1sfr!2sma!4v1761558311843!5m2!1sfr!2sma"
+        title="Localisation Amenagement Maroc"
+        allowFullScreen
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+      ></iframe>
     </div>
   
   </> 

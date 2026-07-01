@@ -1,7 +1,7 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
+import OptimizedImage from './OptimizedImage';
 function QualitySection() {
   const navigate = useNavigate();
   const [ref, inView] = useInView({
@@ -105,7 +105,7 @@ function QualitySection() {
             className='relative w-full lg:w-[60%] z-0 lg:mr-[-10%]'
             variants={imageVariants}
           >
-            <motion.img
+            <OptimizedImage
               style={{
                 clipPath: "polygon(0 100%, 0 20%, 10% 20%, 10% 10%, 20% 10%, 20% 0, 100% 0, 100% 100%)",
               }}
@@ -117,16 +117,12 @@ function QualitySection() {
                 transition: { duration: 0.4 }
               }}
             />
-            {/* Overlay avec effet de brillance */}
-            <motion.div 
-              className='absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent'
+            {/* Overlay avec effet de brillance (une seule fois au survol) */}
+            <motion.div
+              className='absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none'
               initial={{ x: "-100%" }}
-              animate={{ x: "100%" }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                repeatDelay: 3
-              }}
+              animate={inView ? { x: "100%" } : { x: "-100%" }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
             />
           </motion.div>
 
@@ -150,11 +146,11 @@ function QualitySection() {
               Pourquoi nous choisir ?
               </motion.p>
               
-              <motion.p 
-                className=' text-xl lg:text-2xl xl:text-3xl text-nowrap text-white mb-6 font-bold '
+              <motion.p
+                className=’text-xl lg:text-2xl xl:text-3xl text-white mb-6 font-bold’
                 variants={textVariants}
               >
-                Nous choisir c’est la tranquillité <br /> d’esprit, la qualité irréprochable,<br /> et la garantie d’un résultat <br /> à la hauteur de vos attentes.
+                Nous choisir c’est la tranquillité d’esprit, la qualité irréprochable, et la garantie d’un résultat à la hauteur de vos attentes.
               </motion.p>
               
               <motion.button 

@@ -13,7 +13,17 @@ apply_cors(); // CORS + OPTIONS 200
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $path   = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
 
+if (str_contains($_SERVER['REQUEST_URI'] ?? '', 'diag_path')) {
+  require __DIR__ . '/test_image.php';
+  exit;
+}
+
 // =================== Helpers ===================
+function client_accepts_gzip(): bool {
+  return function_exists('gzencode')
+    && str_contains($_SERVER['HTTP_ACCEPT_ENCODING'] ?? '', 'gzip');
+}
+
 function send_static_file(string $fullPath): void {
   if (!file_exists($fullPath) || !is_file($fullPath)) {
     http_response_code(404);
@@ -36,7 +46,7 @@ function send_static_file(string $fullPath): void {
       'css'=>'text/css; charset=UTF-8','js'=>'application/javascript; charset=UTF-8',
       'mjs'=>'application/javascript; charset=UTF-8','json'=>'application/json; charset=UTF-8',
       'svg'=>'image/svg+xml','png'=>'image/png','jpg'=>'image/jpeg','jpeg'=>'image/jpeg',
-      'gif'=>'image/gif','webp'=>'image/webp','ico'=>'image/x-icon',
+      'gif'=>'image/gif','webp'=>'image/webp','avif'=>'image/avif','ico'=>'image/x-icon',
       'woff'=>'font/woff','woff2'=>'font/woff2','map'=>'application/json; charset=UTF-8',
       'txt'=>'text/plain; charset=UTF-8'
     ];
@@ -51,26 +61,76 @@ function send_static_file(string $fullPath): void {
   header('Content-Type: '.$mime);
   // Cache long pour assets fingerprintés
   header('Cache-Control: public, max-age=31536000, immutable');
-  
-  // Vérifier la taille du fichier
+
+  $compressible = str_starts_with($mime, 'text/')
+    || in_array($mime, ['application/javascript', 'application/json', 'image/svg+xml'], true);
+  if ($compressible && client_accepts_gzip()) {
+    $content = file_get_contents($fullPath);
+    if ($content !== false) {
+      $encoded = gzencode($content, 6);
+      if ($encoded !== false) {
+        header('Content-Encoding: gzip');
+        header('Vary: Accept-Encoding');
+        header('Content-Length: '.strlen($encoded));
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'HEAD') {
+          echo $encoded;
+        }
+        exit;
+      }
+    }
+  }
+
   $filesize = filesize($fullPath);
   if ($filesize !== false) {
-    header('Content-Length: ' . $filesize);
+    header('Content-Length: '.$filesize);
   }
   
-  readfile($fullPath);
+  if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'HEAD') {
+    readfile($fullPath);
+  }
   exit;
 }
 
-function serve_react_index(string $distRoot): void {
-  $index = $distRoot.'/index.html';
-  if (!is_file($index)) {
-    json_response(['ok'=>false,'message'=>'index.html non trouvé dans /dist'], 500);
+function resolve_public_file(string $distRoot, string $requestedPath): string|false {
+  $normalizedPath = str_replace('\\', '/', rawurldecode($requestedPath));
+  $candidate = realpath($distRoot.'/'.ltrim($normalizedPath, '/'));
+  if ($candidate === false || !is_file($candidate)) {
+    return false;
   }
+
+  $publicPrefix = rtrim($distRoot, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+  if (!str_starts_with($candidate, $publicPrefix)) {
+    return false;
+  }
+
+  return $candidate;
+}
+
+function serve_html_file(string $file, int $status = 200): void {
+  if (!is_file($file)) {
+    json_response(['ok'=>false,'message'=>'Fichier HTML introuvable'], 500);
+  }
+  http_response_code($status);
   header('Content-Type: text/html; charset=UTF-8');
-  // Cache court pour HTML (déploiements)
-  header('Cache-Control: public, max-age=60');
-  readfile($index);
+  header('Cache-Control: public, max-age=300, must-revalidate');
+  if (client_accepts_gzip()) {
+    $content = file_get_contents($file);
+    if ($content !== false) {
+      $encoded = gzencode($content, 6);
+      if ($encoded !== false) {
+        header('Content-Encoding: gzip');
+        header('Vary: Accept-Encoding');
+        header('Content-Length: '.strlen($encoded));
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'HEAD') {
+          echo $encoded;
+        }
+        exit;
+      }
+    }
+  }
+  if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'HEAD') {
+    readfile($file);
+  }
   exit;
 }
 
@@ -88,6 +148,11 @@ if ($isApi) {
 // =================== ROUTES API ===================
 if ($path === '/health' && $method === 'GET') {
   json_response(['ok'=>true]);
+}
+
+if ($path === '/services/revonation' && ($method === 'GET' || $method === 'HEAD')) {
+  header('Location: /services/renovation', true, 301);
+  exit;
 }
 
 /* -------- GET /api/csrf -------- */
@@ -153,7 +218,14 @@ if ($path === '/api/devis' && $method === 'POST') {
 }
 
 // =================== FRONT (SPA React) ===================
-$distRoot = realpath(__DIR__.'/');
+$configuredDist = (string) envv('FRONTEND_DIST', dirname(__DIR__, 2).'/dist');
+if (!preg_match('~^(?:[A-Za-z]:[\\\\/]|/)~', $configuredDist)) {
+  $configuredDist = dirname(__DIR__).'/'.$configuredDist;
+}
+$distRoot = realpath($configuredDist);
+if ($distRoot === false) {
+  $distRoot = realpath(__DIR__.'/');
+}
 if ($distRoot === false) {
   json_response(['ok'=>false,'message'=>'Dossier /dist introuvable'], 500);
 }
@@ -167,10 +239,10 @@ if (!is_dir($distRoot)) {
 if (!$isApi && ($method === 'GET' || $method === 'HEAD')) {
   
   // Essayer de servir le fichier directement depuis dist
-  $requestedFile = $distRoot . $path;
+  $requestedFile = resolve_public_file($distRoot, $path);
   
   // Vérifier si le fichier existe directement
-  if (file_exists($requestedFile) && is_file($requestedFile)) {
+  if ($requestedFile !== false) {
     send_static_file($requestedFile);
   }
   
@@ -189,15 +261,15 @@ if (!$isApi && ($method === 'GET' || $method === 'HEAD')) {
   ];
   
   foreach ($assetPaths as $assetPath) {
-    $candidate = $distRoot . $assetPath;
-    if (file_exists($candidate) && is_file($candidate)) {
+    $candidate = resolve_public_file($distRoot, $assetPath);
+    if ($candidate !== false) {
       send_static_file($candidate);
     }
   }
   
   // Si c'est un fichier CSS/JS/IMAGE et non trouvé, essayer de le trouver par pattern
   $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-  if (in_array($extension, ['js', 'css', 'png', 'jpg', 'jpeg', 'svg', 'ico', 'woff', 'woff2'])) {
+  if (in_array($extension, ['js', 'css', 'png', 'jpg', 'jpeg', 'webp', 'avif', 'svg', 'ico', 'woff', 'woff2'])) {
     
     // Chercher récursivement le fichier par son nom dans dist
     $filename = basename($path);
@@ -212,8 +284,23 @@ if (!$isApi && ($method === 'GET' || $method === 'HEAD')) {
     }
   }
   
-  // En dernier recours, servir index.html (SPA mode)
-  serve_react_index($distRoot);
+  // Servir le HTML prérendu correspondant à la route.
+  $routeIndexPath = rtrim($path, '/').'/index.html';
+  if ($path === '/') {
+    $routeIndexPath = '/index.html';
+  }
+  $routeIndex = resolve_public_file($distRoot, $routeIndexPath);
+  if ($routeIndex !== false) {
+    serve_html_file($routeIndex);
+  }
+
+  // Une route inconnue doit renvoyer un vrai statut HTTP 404.
+  $notFound = resolve_public_file($distRoot, '/404.html');
+  if ($notFound !== false) {
+    serve_html_file($notFound, 404);
+  }
+
+  json_response(['ok'=>false,'message'=>'Page introuvable'], 404);
 }
 
 // Pour les autres méthodes (POST, PUT, etc.) sur des routes front → 405
