@@ -15,34 +15,41 @@ function setMeta(selector, attributes) {
   })
 }
 
+/** Applique les balises SEO d'une page (utilisé aussi par les pages dynamiques comme les articles). */
+// eslint-disable-next-line react-refresh/only-export-components
+export function applySeo(seo, { schema = localBusinessSchema, type = 'website' } = {}) {
+  document.title = seo.title
+
+  setMeta('meta[name="description"]', { name: 'description', content: seo.description })
+  setMeta('meta[name="robots"]', { name: 'robots', content: seo.robots })
+  setMeta('meta[property="og:title"]', { property: 'og:title', content: seo.title })
+  setMeta('meta[property="og:description"]', { property: 'og:description', content: seo.description })
+  setMeta('meta[property="og:url"]', { property: 'og:url', content: seo.canonical })
+  setMeta('meta[property="og:image"]', { property: 'og:image', content: seo.image })
+  setMeta('meta[property="og:type"]', { property: 'og:type', content: type })
+  setMeta('meta[name="twitter:card"]', { name: 'twitter:card', content: 'summary_large_image' })
+  setMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: seo.title })
+  setMeta('meta[name="twitter:description"]', { name: 'twitter:description', content: seo.description })
+  setMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: seo.image })
+  setMeta('link[rel="canonical"]', { tag: 'link', rel: 'canonical', href: seo.canonical })
+
+  let schemaTag = document.head.querySelector('script[data-seo-schema]')
+  if (!schemaTag) {
+    schemaTag = document.createElement('script')
+    schemaTag.type = 'application/ld+json'
+    schemaTag.dataset.seoSchema = 'local-business'
+    document.head.appendChild(schemaTag)
+  }
+  schemaTag.textContent = JSON.stringify(schema)
+}
+
 export default function Seo() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    const seo = getSeoForPath(pathname)
-    document.title = seo.title
-
-    setMeta('meta[name="description"]', { name: 'description', content: seo.description })
-    setMeta('meta[name="robots"]', { name: 'robots', content: seo.robots })
-    setMeta('meta[property="og:title"]', { property: 'og:title', content: seo.title })
-    setMeta('meta[property="og:description"]', { property: 'og:description', content: seo.description })
-    setMeta('meta[property="og:url"]', { property: 'og:url', content: seo.canonical })
-    setMeta('meta[property="og:image"]', { property: 'og:image', content: seo.image })
-    setMeta('meta[property="og:type"]', { property: 'og:type', content: 'website' })
-    setMeta('meta[name="twitter:card"]', { name: 'twitter:card', content: 'summary_large_image' })
-    setMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: seo.title })
-    setMeta('meta[name="twitter:description"]', { name: 'twitter:description', content: seo.description })
-    setMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: seo.image })
-    setMeta('link[rel="canonical"]', { tag: 'link', rel: 'canonical', href: seo.canonical })
-
-    let schema = document.head.querySelector('script[data-seo-schema]')
-    if (!schema) {
-      schema = document.createElement('script')
-      schema.type = 'application/ld+json'
-      schema.dataset.seoSchema = 'local-business'
-      document.head.appendChild(schema)
-    }
-    schema.textContent = JSON.stringify(localBusinessSchema)
+    // Les pages d'article gèrent leurs propres balises une fois le contenu chargé.
+    if (/^\/articles\/[^/]+\/?$/.test(pathname)) return
+    applySeo(getSeoForPath(pathname))
   }, [pathname])
 
   return null

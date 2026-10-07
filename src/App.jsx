@@ -21,6 +21,9 @@ const Pienture = lazy(() => import('./pages/services/Pienture'))
 const RevelementSol = lazy(() => import('./pages/services/RevêtementSol'))
 const Plafonds = lazy(() => import('./pages/services/Plafonds'))
 const NotFound = lazy(() => import('./pages/NotFound'))
+const ArticlesList = lazy(() => import('./pages/ArticlesList'))
+const Article = lazy(() => import('./pages/Article'))
+const AdminApp = lazy(() => import('./admin/AdminApp'))
 
 export function AppRoutes() {
   // Layout global
@@ -39,6 +42,15 @@ export function AppRoutes() {
 
   return (
       <Routes>
+        <Route
+          path="/admin/*"
+          element={
+            <Suspense fallback={<Loader />}>
+              <Seo />
+              <AdminApp />
+            </Suspense>
+          }
+        />
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
@@ -54,6 +66,9 @@ export function AppRoutes() {
           <Route path="/services/travaux-revetement-de-sol" element={<RevelementSol />} />
           <Route path="/services/travaux-plafonds-et-faux-plafonds" element={<Plafonds />} />
           <Route path="/savoir-faire" element={<SavoirFaire />} />
+          <Route path="/articles" element={<ArticlesList />} />
+          <Route path="/articles/:slug" element={<Article />} />
+          <Route path="/blog" element={<Navigate to="/articles" replace />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

@@ -12,6 +12,7 @@ export default function Navbar() {
     { name: "À PROPOS", href: "/about" },
     { name: "SAVOIR FAIRE", href: "/savoir-faire" },
     { name: "SERVICES", href: "/services" },
+    { name: "ARTICLES", href: "/articles" },
     { name: "DEVIS", href: "/devis" },
     { name: "CONTACT", href: "/contact" },
   ];

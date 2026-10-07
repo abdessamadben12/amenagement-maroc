@@ -1,11 +1,17 @@
 // vite.config.js
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 
-export default defineConfig(({ isSsrBuild }) => ({
+export default defineConfig(({ isSsrBuild, mode }) => ({
   plugins: [
     react(),
   ],
+  server: {
+    // En dev, les images envoyées depuis l'admin sont servies par l'API PHP.
+    proxy: {
+      '/uploads': loadEnv(mode, process.cwd(), '').VITE_API_BASE_URL || 'http://localhost:8080',
+    },
+  },
   build: {
     manifest: !isSsrBuild,
     target: 'es2017', // code plus moderne et léger

@@ -147,7 +147,7 @@ function QualitySection() {
               </motion.p>
               
               <motion.p
-                className=’text-xl lg:text-2xl xl:text-3xl text-white mb-6 font-bold’
+                className='text-xl lg:text-2xl xl:text-3xl text-white mb-6 font-bold'
                 variants={textVariants}
               >
                 Nous choisir c’est la tranquillité d’esprit, la qualité irréprochable, et la garantie d’un résultat à la hauteur de vos attentes.

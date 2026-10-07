@@ -30,6 +30,52 @@ php -S localhost:8080 -t public public/index.php
 
 Configurer SMTP et `CORS_ORIGINS` dans `php_backend/.env` avant de tester les formulaires.
 
+## Articles et espace administrateur
+
+Les articles sont rédigés avec l’éditeur Quill et stockés en base de données, configurée dans `php_backend/.env` (code : `php_backend/src/Database.php`) :
+
+```ini
+# SQLite (défaut) : un simple fichier, aucun serveur à installer
+DB_DRIVER=sqlite
+DB_PATH=storage/database.sqlite
+
+# ou MySQL / MariaDB (hébergement avec phpMyAdmin)
+DB_DRIVER=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=amenagement_maroc
+DB_USER=utilisateur
+DB_PASS=mot_de_passe
+```
+
+Les tables sont créées automatiquement à la première connexion.
+
+Exporter la base (fichier `.sql` compatible MySQL / phpMyAdmin, dans `php_backend/storage/exports/`) :
+
+```bash
+cd php_backend
+php bin/export-db.php              # admins + articles
+php bin/export-db.php --no-admins  # articles seulement
+```
+
+Pour passer en MySQL : créer la base, importer le fichier exporté (phpMyAdmin > Importer), puis mettre `DB_DRIVER=mysql` et les identifiants dans `.env`.
+
+- Pages publiques : `/articles` et `/articles/:slug` (`/blog` redirige vers `/articles`)
+- Administration : `/admin` (connexion, liste, création, modification, suppression, upload d’images)
+
+Créer (ou réinitialiser) un compte administrateur :
+
+```bash
+cd php_backend
+php bin/create-admin.php email@exemple.com "Nom"
+```
+
+Le mot de passe (12 caractères minimum) est demandé dans le terminal. Il n’existe pas d’inscription publique.
+
+Sécurité : session PHP `HttpOnly` + `SameSite=Strict` (+ `Secure` avec `SESSION_SECURE=true` en HTTPS), régénération de l’ID à la connexion, expiration après 2 h d’inactivité / 12 h maximum, jeton CSRF sur chaque modification, blocage après 5 échecs de connexion en 15 min, mots de passe hachés (Argon2id ou bcrypt), HTML des articles filtré par liste blanche côté serveur, images vérifiées (type réel, 5 Mo max, nom aléatoire) et exécution de scripts interdite dans `public/uploads/`.
+
+En production, les dossiers `php_backend/storage/` et `php_backend/public/uploads/` doivent être accessibles en écriture par PHP.
+
 ## Vérifications
 
 ```bash

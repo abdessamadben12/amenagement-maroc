@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /admin
 
 Sitemap: https://amenagement-maroc.com/sitemap.xml
+Sitemap: https://amenagement-maroc.com/sitemap-articles.xml

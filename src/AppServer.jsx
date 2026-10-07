@@ -18,6 +18,8 @@ import Pienture from './pages/services/Pienture'
 import RevelementSol from './pages/services/RevêtementSol'
 import Plafonds from './pages/services/Plafonds'
 import NotFound from './pages/NotFound'
+import ArticlesList from './pages/ArticlesList'
+import Article from './pages/Article'
 
 function Layout() {
   return (
@@ -52,6 +54,8 @@ export default function AppServer() {
         <Route path="/services/travaux-revetement-de-sol" element={<RevelementSol />} />
         <Route path="/services/travaux-plafonds-et-faux-plafonds" element={<Plafonds />} />
         <Route path="/savoir-faire" element={<SavoirFaire />} />
+        <Route path="/articles" element={<ArticlesList />} />
+        <Route path="/articles/:slug" element={<Article />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

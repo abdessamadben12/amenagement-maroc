@@ -25,3 +25,12 @@ php_backend/.env
 *.njsproj
 *.sln
 *.sw?
+
+# Données de l'espace admin
+php_backend/storage/*
+!php_backend/storage/.htaccess
+php_backend/public/uploads/*
+!php_backend/public/uploads/.htaccess
+
+# Paquet de mise en ligne
+/deploy

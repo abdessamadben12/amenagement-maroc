@@ -34,5 +34,5 @@ function csrf_issue_token(): string {
 function csrf_validate_from_request(): bool {
   $cookie = $_COOKIE[csrf_cookie_name()] ?? '';
   $header = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
-  return is_string($cookie) && is_string($header) && hash_equals($cookie, $header);
+  return is_string($cookie) && is_string($header) && $cookie !== '' && hash_equals($cookie, $header);
 }

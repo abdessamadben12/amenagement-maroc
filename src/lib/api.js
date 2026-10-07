@@ -40,3 +40,45 @@ export async function submitForm(endpoint, data) {
 
   return payload
 }
+
+/** Préfixe les chemins relatifs (/uploads/...) avec l'URL de l'API. */
+export function mediaUrl(src) {
+  if (!src) return ''
+  return src.startsWith('/') ? `${API_BASE_URL}${src}` : src
+}
+
+export async function apiRequest(endpoint, { method = 'GET', body, csrfToken, signal } = {}) {
+  const headers = { Accept: 'application/json' }
+  if (csrfToken) headers['X-CSRF-Token'] = csrfToken
+  const isForm = typeof FormData !== 'undefined' && body instanceof FormData
+  if (body !== undefined && !isForm) headers['Content-Type'] = 'application/json'
+
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    method,
+    credentials: 'include',
+    headers,
+    signal,
+    body: body === undefined ? undefined : isForm ? body : JSON.stringify(body),
+  })
+  const payload = await readJson(response)
+
+  if (!response.ok) {
+    const error = new Error(payload?.message || 'Une erreur est survenue.')
+    error.status = response.status
+    error.validationErrors = payload?.errors || null
+    throw error
+  }
+  return payload
+}
+
+/** Connexion admin : récupère d'abord un jeton CSRF (cookie double-soumission). */
+export async function adminLogin(email, password) {
+  const { csrfToken } = await apiRequest('/api/csrf')
+  return apiRequest('/api/admin/login', { method: 'POST', body: { email, password }, csrfToken })
+}
+
+export function formatArticleDate(value) {
+  if (!value) return ''
+  const date = new Date(value.replace(' ', 'T') + 'Z')
+  return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+}

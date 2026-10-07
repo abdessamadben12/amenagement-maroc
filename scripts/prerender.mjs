@@ -11,7 +11,10 @@ if (stylesheetTag) {
   const stylesheet = await readFile(stylesheetPath, 'utf8')
   template = template.replace(stylesheetTag[0], `<style data-inline-css>${stylesheet}</style>`)
 }
-const serverEntry = pathToFileURL(path.resolve('dist-ssr/entry-server.js')).href
+// Coquille à racine vide pour les routes dynamiques (/articles/:slug, /admin) servies par PHP.
+await writeFile(path.join(distRoot, '_shell.html'), template, 'utf8')
+
+const serverEntry =pathToFileURL(path.resolve('dist-ssr/entry-server.js')).href
 const { render } = await import(serverEntry)
 
 function escapeHtml(value) {

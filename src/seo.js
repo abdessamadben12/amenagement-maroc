@@ -22,6 +22,10 @@ export const routeSeo = {
     title: 'Demande de devis gratuit | Aménagement Maroc',
     description: 'Demandez gratuitement un devis personnalisé pour vos travaux de construction, rénovation, agencement ou aménagement au Maroc.',
   },
+  '/articles': {
+    title: 'Articles et conseils travaux | Aménagement Maroc',
+    description: 'Conseils, tendances et retours d’expérience sur la rénovation, l’aménagement intérieur et les travaux au Maroc.',
+  },
   '/services/renovation': {
     title: 'Rénovation complète au Maroc | Aménagement Maroc',
     description: 'Rénovation complète de maisons, appartements, villas et locaux professionnels au Maroc, avec coordination et suivi des travaux.',
@@ -66,6 +70,16 @@ export function normalizePath(pathname) {
 export function getSeoForPath(pathname) {
   const path = normalizePath(pathname)
   const data = routeSeo[path]
+
+  if (path === '/admin' || path.startsWith('/admin/')) {
+    return {
+      title: 'Administration | Aménagement Maroc',
+      description: 'Espace d’administration',
+      canonical: `${SITE_URL}${path}`,
+      image: DEFAULT_IMAGE,
+      robots: 'noindex, nofollow',
+    }
+  }
 
   if (!data) {
     return {
